@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+.venv/
+venv/
+.env
+
+# Pytest cache
+.pytest_cache/
+
+# Docker
+*.log
+*.pid
+*.db
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+terraform.tfvars
+crash.log
+
+# General
+*.swp
+.DS_Store
+.idea/
+.vscode/
+
+
+
+
+# To Check if still needed - configuration files
+deploy-eb.sh
+
+# To Check if still needed - ec2 and AWS data
+ec2-user@*
