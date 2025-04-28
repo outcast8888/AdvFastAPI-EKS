@@ -3,13 +3,17 @@ variable "environment" {
   type        = string
 }
 
-variable "location" {
-  description = "Azure region for the deployment"
+variable "aws_region" {
+  description = "AWS region for deployment"
   type        = string
-  default     = "East US"
 }
 
-variable "resource_group_name" {
-  description = "Name of the Azure Resource Group"
+variable "project_name" {
+  description = "Name of the project for tagging resources"
+  type        = string
+}
+
+variable "eks_cluster_name" {
+  description = "EKS Cluster name"
   type        = string
 }

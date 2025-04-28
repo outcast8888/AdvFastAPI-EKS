@@ -2,6 +2,8 @@
 __pycache__/
 *.py[cod]
 *.pyc
+*.pyo
+*.pyd
 .venv/
 venv/
 .env
@@ -18,14 +20,21 @@ venv/
 *.tfstate
 *.tfstate.*
 .terraform/
+terraform.tfplan
 terraform.tfvars
+prod.tfvars
+test.tfvars
 crash.log
 
-# General
+# General / VSCode / IDE
 *.swp
 .DS_Store
 .idea/
 .vscode/
+
+# OS Files
+.DS_Store
+Thumbs.db
 
 
 
