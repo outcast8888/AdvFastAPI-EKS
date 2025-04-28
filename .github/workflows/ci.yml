@@ -1,1 +1,50 @@
-# TBD
+name: CI - FastAPI App Testing
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: 🧪 Run FastAPI App Tests
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: app
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.10
+
+      - name: 📦 Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install fastapi uvicorn pytest pytest-cov
+
+      - name: 🧹 Check Python formatting (flake8)
+        run: |
+          pip install flake8
+          flake8 . --max-line-length=120
+
+      - name: ✅ Run unit tests with coverage
+        run: |
+          source venv/bin/activate
+          pytest --cov=. --cov-report=xml
+
+      - name: 📊 Upload coverage report to GitHub
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: app/coverage.xml

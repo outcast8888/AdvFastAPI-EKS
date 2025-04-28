@@ -1,1 +1,58 @@
-# TBD
+name: CD - Deploy FastAPI App to EKS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: 🚀 Deploy to EKS
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: terraform
+
+    env:
+      AWS_REGION: us-east-1
+      CLUSTER_NAME: advfastapi-dev-eks
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: ☁️ Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: 🧹 Setup kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: v1.29.0
+
+      - name: 📡 Update kubeconfig for EKS
+        run: |
+          aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
+
+      - name: 🐳 Build Docker image
+        run: |
+          docker build -t fastapi-app:latest ./app
+
+      - name: 📤 Push Docker image to ECR (optional — for later use)
+        if: false  # Disable for now, enable later when ready for ECR
+        run: |
+          echo "Login to ECR and push image (to be configured later)"
+
+      - name: 📂 Deploy to Kubernetes (apply manifests)
+        run: |
+          kubectl apply -f k8s/deployment.yaml
+          kubectl apply -f k8s/service.yaml
+
+      - name: 📋 Verify deployment
+        run: |
+          kubectl get pods
+          kubectl get svc
